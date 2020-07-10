@@ -21,9 +21,7 @@ const App = () => {
         console.log(error)
       }
     }
-
     getData()
-
   }, [])
 
   const agregarTarea = async e => {
