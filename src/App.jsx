@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { firebase } from './firebase'
+import { firebase } from './services/firebase'
 
 const App = () => {
   const [tareas, setTareas] = useState([])
