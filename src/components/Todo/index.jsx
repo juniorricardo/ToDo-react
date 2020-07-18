@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { firebase } from './../../services/firebase'
+import { db } from './../../services/firebase'
 
 const Todo = () => {
   const [tareas, setTareas] = useState([])
@@ -10,11 +10,10 @@ const Todo = () => {
   React.useEffect(() => {
     const getData = async () => {
       try {
-        const db = firebase.firestore()
         const data = await db.collection('tareas').get()
 
         const array = data.docs.map(doc => ({ id: doc.id, ...doc.data() }))
-        console.log(data.docs)
+        console.log(array)
 
         setTareas(array)
       } catch (error) {
@@ -28,7 +27,6 @@ const Todo = () => {
     e.preventDefault()
     if (!tarea.trim()) console.log('vacio')
     else {
-      const db = firebase.firestore()
       const nuevaTarea = {
         name: tarea,
         fecha: Date.now()
@@ -40,7 +38,6 @@ const Todo = () => {
   }
 
   const eliminar = async id => {
-    const db = firebase.firestore()
     await db
       .collection('tareas')
       .doc(id)
@@ -56,7 +53,6 @@ const Todo = () => {
   }
   const editar = async e => {
     e.preventDefault()
-    const db = firebase.firestore()
     const data = await db
       .collection('tareas')
       .doc(id)
