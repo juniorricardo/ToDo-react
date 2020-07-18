@@ -2,6 +2,7 @@ import React from 'react'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import Todo from './components/Todo'
+import Login from './components/Login/Login'
 
 const App = () => {
   return (
@@ -9,7 +10,9 @@ const App = () => {
       <div className='container'>
         <Navbar />
         <Switch>
-          <Route path='/login'>Ruta de login</Route>
+          <Route path='/login'>
+            <Login />
+          </Route>
           <Route path='/admin'>
             <Todo />
           </Route>
