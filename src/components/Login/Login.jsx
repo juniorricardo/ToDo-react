@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { auth } from './../../services/firebase'
+import { db, auth } from './../../services/firebase'
 
 const Login = () => {
   const [email, setEmail] = useState('')
@@ -24,15 +24,29 @@ const Login = () => {
     setError(null)
     if (esRegistro) {
       Registrar()
+    } else {
+      IniciarSesion()
     }
   }
 
   const Registrar = React.useCallback(async () => {
     try {
-      const response = await auth.createUserWithEmailAndPassword(email, password)
-      console.log(response)
+      const res = await auth.createUserWithEmailAndPassword(email, password)
+      console.log(res.user)
+      await db
+        .collection('Usuarios')
+        .doc(res.user.uid)
+        .set({
+          fechaCreacion: Date.now(),
+          displayName: res.user.displayName,
+          photoURL: res.user.photoURL,
+          email: res.user.email,
+          uid: res.user.uid
+        })
+      setEmail('')
+      setPassword('')
+      setError(null)
     } catch (error) {
-      debugger
       console.log(error)
       if (error.code === 'auth/email-already-in-use') {
         setError('Email ingresado ya existe.')
@@ -44,10 +58,28 @@ const Login = () => {
       }
     }
   }, [email, password])
+
+  const IniciarSesion = React.useCallback(async () => {
+    try {
+      const res = await auth.signInWithEmailAndPassword(email, password)
+      console.log(res.user)
+    } catch (error) {
+      console.log(error)
+      if (
+        error.code === 'auth/invalid-email' ||
+        error.code === 'auth/user-not-found' ||
+        error.code === 'auth/wrong-password'
+      ) {
+        setError('Email y/o contraseña no son validos')
+        return
+      }
+    }
+  }, [email, password])
+
   return (
-    <div className='mt-5'>
-      <h3 className='text-center'>
-        {esRegistro ? 'Registro' : 'Acceso a cuenta'}
+    <div className='mt-3'>
+      <h3 className='text-center display-4'>
+        {esRegistro ? 'Registro' : 'Login'}
       </h3>
       <hr />
       <div className='row justify-content-center'>

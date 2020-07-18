@@ -10,7 +10,7 @@ const Todo = () => {
   React.useEffect(() => {
     const getData = async () => {
       try {
-        const data = await db.collection('tareas').get()
+        const data = await db.collection('Tareas').get()
 
         const array = data.docs.map(doc => ({ id: doc.id, ...doc.data() }))
         console.log(array)
@@ -28,10 +28,10 @@ const Todo = () => {
     if (!tarea.trim()) console.log('vacio')
     else {
       const nuevaTarea = {
-        name: tarea,
+        descripcion: tarea,
         fecha: Date.now()
       }
-      const data = await db.collection('tareas').add(nuevaTarea)
+      const data = await db.collection('Tareas').add(nuevaTarea)
       setTareas([...tareas, { ...nuevaTarea, id: data.id }])
       setTarea('')
     }
@@ -39,7 +39,7 @@ const Todo = () => {
 
   const eliminar = async id => {
     await db
-      .collection('tareas')
+      .collection('Tareas')
       .doc(id)
       .delete()
       .catch(error => console.log(error))
@@ -47,19 +47,19 @@ const Todo = () => {
     setTareas(arrayFiltrado)
   }
   const activarEdicion = enTarea => {
-    setTarea(enTarea.name)
+    setTarea(enTarea.descripcion)
     setId(enTarea.id)
     setModoEditar(true)
   }
   const editar = async e => {
     e.preventDefault()
     const data = await db
-      .collection('tareas')
+      .collection('Tareas')
       .doc(id)
-      .update({ name: tarea })
+      .update({ descripcion: tarea })
       .catch(error => console.log(error))
     const arrayActualizado = tareas.map(item =>
-      item.id === id ? { id, name: tarea, fecha: item.fecha } : item
+      item.id === id ? { id, descripcion: tarea, fecha: item.fecha } : item
     )
     setTareas(arrayActualizado)
     setId('')
@@ -94,7 +94,7 @@ const Todo = () => {
           <ul className='list-group'>
             {tareas.map(item => (
               <li className='list-group-item' key={item.id}>
-                {item.name}
+                {item.descripcion}
                 <button
                   className='btn btn-danger btn-sm float-right'
                   onClick={() => eliminar(item.id)}
