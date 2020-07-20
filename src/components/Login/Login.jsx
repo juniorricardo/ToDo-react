@@ -1,13 +1,14 @@
 import React, { useState } from 'react'
 import { db, auth } from './../../services/firebase'
+import { withRouter } from 'react-router-dom'
 
-const Login = () => {
+const Login = ({ history }) => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState(null)
   const [esRegistro, setEsRegistro] = useState(false)
 
-  const procesarDatos = e => {
+  const procesarDatos = (e) => {
     e.preventDefault()
     if (!email.trim()) {
       setError('Ingrese email')
@@ -33,19 +34,15 @@ const Login = () => {
     try {
       const res = await auth.createUserWithEmailAndPassword(email, password)
       console.log(res.user)
-      await db
-        .collection('Usuarios')
-        .doc(res.user.uid)
-        .set({
-          fechaCreacion: Date.now(),
-          displayName: res.user.displayName,
-          photoURL: res.user.photoURL,
-          email: res.user.email,
-          uid: res.user.uid
-        })
-      setEmail('')
-      setPassword('')
-      setError(null)
+      await db.collection('Usuarios').doc(res.user.uid).set({
+        fechaCreacion: Date.now(),
+        displayName: res.user.displayName,
+        photoURL: res.user.photoURL,
+        email: res.user.email,
+        uid: res.user.uid
+      })
+      LimpiarCampos()
+      history.push('/admin')
     } catch (error) {
       console.log(error)
       if (error.code === 'auth/email-already-in-use') {
@@ -57,12 +54,14 @@ const Login = () => {
         return
       }
     }
-  }, [email, password])
+  }, [email, password, history])
 
   const IniciarSesion = React.useCallback(async () => {
     try {
       const res = await auth.signInWithEmailAndPassword(email, password)
       console.log(res.user)
+      LimpiarCampos()
+      history.push('/admin')
     } catch (error) {
       console.log(error)
       if (
@@ -74,7 +73,13 @@ const Login = () => {
         return
       }
     }
-  }, [email, password])
+  }, [email, password, history])
+
+  const LimpiarCampos = () => {
+    setEmail('')
+    setPassword('')
+    setError(null)
+  }
 
   return (
     <div className='mt-3'>
@@ -91,14 +96,14 @@ const Login = () => {
               className='form-control mb-2'
               placeholder='Ingrese un email'
               value={email}
-              onChange={e => setEmail(e.target.value)}
+              onChange={(e) => setEmail(e.target.value)}
             />
             <input
               type='password'
               className='form-control mb-2'
               placeholder='Ingrese su contraseña'
               value={password}
-              onChange={e => setPassword(e.target.value)}
+              onChange={(e) => setPassword(e.target.value)}
             />
             <button className='btn btn-dark btn-lg btn-block' type='submit'>
               {esRegistro ? 'Registrarse' : 'Acceder'}
@@ -106,8 +111,7 @@ const Login = () => {
             <button
               className='btn btn-info btn-sm btn-block'
               type='button'
-              onClick={() => setEsRegistro(!esRegistro)}
-            >
+              onClick={() => setEsRegistro(!esRegistro)}>
               {esRegistro ? 'Ya tengo cuenta' : '¿No tenes una cuenta?'}
             </button>
           </form>
@@ -117,4 +121,4 @@ const Login = () => {
   )
 }
 
-export default Login
+export default withRouter(Login)

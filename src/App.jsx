@@ -3,12 +3,26 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import Todo from './components/Todo'
 import Login from './components/Login/Login'
+import { auth } from './services/firebase'
 
 const App = () => {
-  return (
+  const [firebaseUser, setFirebaseUser] = React.useState(false)
+
+  React.useEffect(() => {
+    auth.onAuthStateChanged((user) => {
+      console.log(user)
+      if (user) {
+        setFirebaseUser(user)
+      } else {
+        setFirebaseUser(null)
+      }
+    })
+  }, [])
+
+  return firebaseUser !== false ? (
     <Router>
       <div className='container'>
-        <Navbar />
+        <Navbar firebaseUser={firebaseUser} />
         <Switch>
           <Route path='/login'>
             <Login />
@@ -22,6 +36,8 @@ const App = () => {
         </Switch>
       </div>
     </Router>
+  ) : (
+    <p>Cargando...</p>
   )
 }
 

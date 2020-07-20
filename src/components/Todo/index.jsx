@@ -1,29 +1,39 @@
 import React, { useState } from 'react'
-import { db } from './../../services/firebase'
+import { auth, db } from './../../services/firebase'
+import { withRouter } from 'react-router-dom'
 
-const Todo = () => {
+const Todo = (props) => {
+  const [user, setUser] = useState(null)
   const [tareas, setTareas] = useState([])
   const [tarea, setTarea] = useState('')
   const [id, setId] = useState('')
   const [modoEditar, setModoEditar] = useState(false)
 
   React.useEffect(() => {
-    const getData = async () => {
-      try {
-        const data = await db.collection('Tareas').get()
-
-        const array = data.docs.map(doc => ({ id: doc.id, ...doc.data() }))
-        console.log(array)
-
-        setTareas(array)
-      } catch (error) {
-        console.log(error)
-      }
+    if (auth.currentUser) {
+      console.log('existe')
+      setUser(auth.currentUser)
+      getData()
+    } else {
+      console.log('no existe')
+      props.history.push('/login')
     }
-    getData()
   }, [])
+  
+  const getData = async () => {
+    try {
+      const data = await db.collection('Tareas').get()
 
-  const agregarTarea = async e => {
+      const array = data.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
+      console.log(array)
+
+      setTareas(array)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const agregarTarea = async (e) => {
     e.preventDefault()
     if (!tarea.trim()) console.log('vacio')
     else {
@@ -37,28 +47,28 @@ const Todo = () => {
     }
   }
 
-  const eliminar = async id => {
+  const eliminar = async (id) => {
     await db
       .collection('Tareas')
       .doc(id)
       .delete()
-      .catch(error => console.log(error))
-    const arrayFiltrado = tareas.filter(item => item.id !== id)
+      .catch((error) => console.log(error))
+    const arrayFiltrado = tareas.filter((item) => item.id !== id)
     setTareas(arrayFiltrado)
   }
-  const activarEdicion = enTarea => {
+  const activarEdicion = (enTarea) => {
     setTarea(enTarea.descripcion)
     setId(enTarea.id)
     setModoEditar(true)
   }
-  const editar = async e => {
+  const editar = async (e) => {
     e.preventDefault()
-    const data = await db
+    await db
       .collection('Tareas')
       .doc(id)
       .update({ descripcion: tarea })
-      .catch(error => console.log(error))
-    const arrayActualizado = tareas.map(item =>
+      .catch((error) => console.log(error))
+    const arrayActualizado = tareas.map((item) =>
       item.id === id ? { id, descripcion: tarea, fecha: item.fecha } : item
     )
     setTareas(arrayActualizado)
@@ -78,13 +88,12 @@ const Todo = () => {
               placeholder='Ingrese una tarea'
               className='form-control'
               value={tarea}
-              onChange={e => setTarea(e.target.value)}
+              onChange={(e) => setTarea(e.target.value)}
             />
             <button
               className={`btn btn-block btn-${
                 modoEditar ? 'warning' : 'dark'
-              } mt-2`}
-            >
+              } mt-2`}>
               {modoEditar ? 'Actualizar' : 'Agregar'}
             </button>
           </form>
@@ -92,19 +101,17 @@ const Todo = () => {
         <div className='col-md-6'>
           <h1 className='display-4'>To do list</h1>
           <ul className='list-group'>
-            {tareas.map(item => (
+            {tareas.map((item) => (
               <li className='list-group-item' key={item.id}>
                 {item.descripcion}
                 <button
                   className='btn btn-danger btn-sm float-right'
-                  onClick={() => eliminar(item.id)}
-                >
+                  onClick={() => eliminar(item.id)}>
                   Eliminar
                 </button>
                 <button
                   className='btn btn-warning btn-sm float-right mr-2'
-                  onClick={() => activarEdicion(item)}
-                >
+                  onClick={() => activarEdicion(item)}>
                   Editar
                 </button>
               </li>
@@ -116,4 +123,4 @@ const Todo = () => {
   )
 }
 
-export default Todo
+export default withRouter(Todo)
