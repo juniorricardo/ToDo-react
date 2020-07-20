@@ -4,6 +4,7 @@ import Navbar from './components/Navbar'
 import Todo from './components/Todo'
 import Login from './components/Login/Login'
 import { auth } from './services/firebase'
+import Admin from './components/Admin'
 
 const App = () => {
   const [firebaseUser, setFirebaseUser] = React.useState(false)
@@ -28,7 +29,7 @@ const App = () => {
             <Login />
           </Route>
           <Route path='/admin'>
-            <Todo />
+            <Admin />
           </Route>
           <Route path='/' exact>
             Ruta de inicio

@@ -12,7 +12,7 @@ const Navbar = (props) => {
   return (
     <div className='navbar navbar-dark bg-dark'>
       <Link to='/' className='navbar-brand'>
-        React Admin
+        To do App - Novem
       </Link>
       <div>
         <div className='d-flex'>

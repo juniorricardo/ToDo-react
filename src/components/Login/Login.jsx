@@ -3,8 +3,8 @@ import { db, auth } from './../../services/firebase'
 import { withRouter } from 'react-router-dom'
 
 const Login = ({ history }) => {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const [email, setEmail] = useState('junior@novem.com')
+  const [password, setPassword] = useState('asdasd')
   const [error, setError] = useState(null)
   const [esRegistro, setEsRegistro] = useState(false)
 
@@ -34,12 +34,16 @@ const Login = ({ history }) => {
     try {
       const res = await auth.createUserWithEmailAndPassword(email, password)
       console.log(res.user)
-      await db.collection('Usuarios').doc(res.user.uid).set({
-        fechaCreacion: Date.now(),
-        displayName: res.user.displayName,
-        photoURL: res.user.photoURL,
-        email: res.user.email,
-        uid: res.user.uid
+      // await db.collection('Usuarios').doc(res.user.uid).set({
+      //   fechaCreacion: Date.now(),
+      //   displayName: res.user.displayName,
+      //   photoURL: res.user.photoURL,
+      //   email: res.user.email,
+      //   uid: res.user.uid
+      // })
+      await db.collection(res.user.uid).add({
+        descripcion: 'Inicio de coleccion',
+        fecha: Date.now()
       })
       LimpiarCampos()
       history.push('/admin')

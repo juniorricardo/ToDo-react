@@ -1,37 +1,31 @@
 import React, { useState } from 'react'
-import { auth, db } from './../../services/firebase'
+import { db } from './../../services/firebase'
 import { withRouter } from 'react-router-dom'
 
-const Todo = (props) => {
-  const [user, setUser] = useState(null)
+const Todo = ({ user }) => {
   const [tareas, setTareas] = useState([])
   const [tarea, setTarea] = useState('')
   const [id, setId] = useState('')
   const [modoEditar, setModoEditar] = useState(false)
 
   React.useEffect(() => {
-    if (auth.currentUser) {
-      console.log('existe')
-      setUser(auth.currentUser)
+    if (user !== null) {
+      const getData = async () => {
+        try {
+          const data = await db.collection(user.uid).get()
+
+          const array = data.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
+          console.log(array)
+
+          setTareas(array)
+        } catch (error) {
+          console.log(error)
+        }
+      }
       getData()
-    } else {
-      console.log('no existe')
-      props.history.push('/login')
+      return
     }
   }, [])
-  
-  const getData = async () => {
-    try {
-      const data = await db.collection('Tareas').get()
-
-      const array = data.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
-      console.log(array)
-
-      setTareas(array)
-    } catch (error) {
-      console.log(error)
-    }
-  }
 
   const agregarTarea = async (e) => {
     e.preventDefault()
@@ -41,15 +35,14 @@ const Todo = (props) => {
         descripcion: tarea,
         fecha: Date.now()
       }
-      const data = await db.collection('Tareas').add(nuevaTarea)
+      const data = await db.collection(user.uid).add(nuevaTarea)
       setTareas([...tareas, { ...nuevaTarea, id: data.id }])
       setTarea('')
     }
   }
-
   const eliminar = async (id) => {
     await db
-      .collection('Tareas')
+      .collection(user.uid)
       .doc(id)
       .delete()
       .catch((error) => console.log(error))
@@ -64,7 +57,7 @@ const Todo = (props) => {
   const editar = async (e) => {
     e.preventDefault()
     await db
-      .collection('Tareas')
+      .collection(user.uid)
       .doc(id)
       .update({ descripcion: tarea })
       .catch((error) => console.log(error))
@@ -78,10 +71,12 @@ const Todo = (props) => {
   }
 
   return (
-    <div className='container mt-2'>
+    <div className='container mt-3'>
       <div className='row'>
         <div className='col-md-6'>
-          <h3 className='display-4'>{modoEditar ? 'Editar' : 'Formulario'}</h3>
+          <h3>
+            {modoEditar ? 'Editar' : 'Formulario'}
+          </h3>
           <form onSubmit={modoEditar ? editar : agregarTarea}>
             <input
               type='text'
@@ -99,7 +94,7 @@ const Todo = (props) => {
           </form>
         </div>
         <div className='col-md-6'>
-          <h1 className='display-4'>To do list</h1>
+          <h3>To do list</h3>
           <ul className='list-group'>
             {tareas.map((item) => (
               <li className='list-group-item' key={item.id}>
