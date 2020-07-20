@@ -3,8 +3,8 @@ import { db, auth } from './../../services/firebase'
 import { withRouter } from 'react-router-dom'
 
 const Login = ({ history }) => {
-  const [email, setEmail] = useState('junior@novem.com')
-  const [password, setPassword] = useState('asdasd')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
   const [error, setError] = useState(null)
   const [esRegistro, setEsRegistro] = useState(false)
 
@@ -33,7 +33,7 @@ const Login = ({ history }) => {
   const Registrar = React.useCallback(async () => {
     try {
       const res = await auth.createUserWithEmailAndPassword(email, password)
-      console.log(res.user)
+      //console.log(res.user)
       // await db.collection('Usuarios').doc(res.user.uid).set({
       //   fechaCreacion: Date.now(),
       //   displayName: res.user.displayName,
@@ -63,7 +63,7 @@ const Login = ({ history }) => {
   const IniciarSesion = React.useCallback(async () => {
     try {
       const res = await auth.signInWithEmailAndPassword(email, password)
-      console.log(res.user)
+      //console.log(res.user)
       LimpiarCampos()
       history.push('/admin')
     } catch (error) {

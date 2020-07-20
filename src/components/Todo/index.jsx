@@ -15,7 +15,7 @@ const Todo = ({ user }) => {
           const data = await db.collection(user.uid).get()
 
           const array = data.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
-          console.log(array)
+          //console.log(array)
 
           setTareas(array)
         } catch (error) {

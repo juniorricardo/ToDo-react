@@ -7,10 +7,10 @@ const Admin = (props) => {
   const [user, setUser] = useState(null)
   React.useEffect(() => {
     if (auth.currentUser) {
-      console.log('existe')
+      //console.log('existe')
       setUser(auth.currentUser)
     } else {
-      console.log('no existe')
+      //console.log('no existe')
       props.history.push('/login')
     }
   }, [props.history])
