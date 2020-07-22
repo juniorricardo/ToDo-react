@@ -25,7 +25,7 @@ const Todo = ({ user }) => {
       getData()
       return
     }
-  }, [])
+  }, [user])
 
   const agregarTarea = async (e) => {
     e.preventDefault()
@@ -74,9 +74,7 @@ const Todo = ({ user }) => {
     <div className='container mt-3'>
       <div className='row'>
         <div className='col-md-6'>
-          <h3>
-            {modoEditar ? 'Editar' : 'Formulario'}
-          </h3>
+          <h3>{modoEditar ? 'Editar' : 'Formulario'}</h3>
           <form onSubmit={modoEditar ? editar : agregarTarea}>
             <input
               type='text'
