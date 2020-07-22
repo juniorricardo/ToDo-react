@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import { db } from './../../services/firebase'
 import { withRouter } from 'react-router-dom'
+import moment from 'moment'
+import 'moment/locale/es'
 
 const Todo = ({ user }) => {
   const [tareas, setTareas] = useState([])
@@ -9,22 +11,18 @@ const Todo = ({ user }) => {
   const [modoEditar, setModoEditar] = useState(false)
 
   React.useEffect(() => {
-    if (user !== null) {
-      const getData = async () => {
-        try {
-          const data = await db.collection(user.uid).get()
+    const getData = async () => {
+      try {
+        const data = await db.collection(user.uid).get()
 
-          const array = data.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
-          //console.log(array)
+        const array = data.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
 
-          setTareas(array)
-        } catch (error) {
-          console.log(error)
-        }
+        setTareas(array)
+      } catch (error) {
+        console.log(error)
       }
-      getData()
-      return
     }
+    getData()
   }, [user])
 
   const agregarTarea = async (e) => {
@@ -97,6 +95,9 @@ const Todo = ({ user }) => {
             {tareas.map((item) => (
               <li className='list-group-item' key={item.id}>
                 {item.descripcion}
+                <small className='text-muted ml-3'>
+                  {moment(item.fecha).format('lll')}
+                </small>
                 <button
                   className='btn btn-danger btn-sm float-right'
                   onClick={() => eliminar(item.id)}>

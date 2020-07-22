@@ -1,0 +1,13 @@
+[debug] [2020-07-22T02:16:18.848Z] ----------------------------------------------------------------------
+[debug] [2020-07-22T02:16:18.849Z] Command:       /usr/bin/node /usr/bin/firebase deploy
+[debug] [2020-07-22T02:16:18.850Z] CLI Version:   8.6.0
+[debug] [2020-07-22T02:16:18.850Z] Platform:      linux
+[debug] [2020-07-22T02:16:18.850Z] Node Version:  v14.3.0
+[debug] [2020-07-22T02:16:18.850Z] Time:          Tue Jul 21 2020 23:16:18 GMT-0300 (hora estándar de Argentina)
+[debug] [2020-07-22T02:16:18.850Z] ----------------------------------------------------------------------
+[debug] [2020-07-22T02:16:18.850Z] 
+[debug] [2020-07-22T02:16:18.855Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2020-07-22T02:16:18.855Z] > authorizing via signed-in user
+[debug] [2020-07-22T02:16:18.856Z] [iam] checking project todo-reactjs-508b5 for permissions ["datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2020-07-22T02:16:18.858Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/todo-reactjs-508b5:testIamPermissions  
+ {"permissions":["datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get","firebasehosting.sites.update"]}
