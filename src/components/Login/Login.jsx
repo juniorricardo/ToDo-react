@@ -33,14 +33,6 @@ const Login = ({ history }) => {
   const Registrar = React.useCallback(async () => {
     try {
       const res = await auth.createUserWithEmailAndPassword(email, password)
-      //console.log(res.user)
-      // await db.collection('Usuarios').doc(res.user.uid).set({
-      //   fechaCreacion: Date.now(),
-      //   displayName: res.user.displayName,
-      //   photoURL: res.user.photoURL,
-      //   email: res.user.email,
-      //   uid: res.user.uid
-      // })
       await db.collection(res.user.uid).add({
         descripcion: 'Inicio de coleccion',
         fecha: Date.now()
@@ -118,6 +110,14 @@ const Login = ({ history }) => {
               onClick={() => setEsRegistro(!esRegistro)}>
               {esRegistro ? 'Ya tengo cuenta' : '¿No tenes una cuenta?'}
             </button>
+            {!esRegistro ? (
+              <button
+                className='btn btn-danger btn-lg btn-sm mt-2'
+                type='button'
+                onClick={() => history.push('/reset')}>
+                Recuperar contraseña
+              </button>
+            ) : null}
           </form>
         </div>
       </div>

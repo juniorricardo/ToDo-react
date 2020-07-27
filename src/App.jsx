@@ -1,10 +1,10 @@
 import React from 'react'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import Navbar from './components/Navbar'
-import Todo from './components/Todo'
 import Login from './components/Login/Login'
 import { auth } from './services/firebase'
 import Admin from './components/Admin'
+import Reset from './components/Login/Reset'
 
 const App = () => {
   const [firebaseUser, setFirebaseUser] = React.useState(false)
@@ -30,6 +30,9 @@ const App = () => {
           </Route>
           <Route path='/admin'>
             <Admin />
+          </Route>
+          <Route path='/reset'>
+            <Reset />
           </Route>
           <Route path='/' exact>
             Ruta de inicio

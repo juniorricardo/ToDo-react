@@ -13,7 +13,11 @@ const Todo = ({ user }) => {
   React.useEffect(() => {
     const getData = async () => {
       try {
-        const data = await db.collection(user.uid).get()
+        const data = await db
+          .collection(user.uid)
+          .limit(5)
+          .orderBy('fecha','asc')
+          .get()
 
         const array = data.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
 
