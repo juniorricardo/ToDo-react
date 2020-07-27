@@ -10,23 +10,40 @@ const Todo = ({ user }) => {
   const [id, setId] = useState('')
   const [modoEditar, setModoEditar] = useState(false)
 
+  const [ultimo, setUltimo] = React.useState(null)
+  const [desactivar, setDesactivar] = React.useState(false)
+
   React.useEffect(() => {
-    const getData = async () => {
+    const ObtenerDatos = async () => {
       try {
+        setDesactivar(true)
         const data = await db
           .collection(user.uid)
-          .limit(5)
-          .orderBy('fecha','asc')
+          .limit(4)
+          .orderBy('fecha', 'asc')
           .get()
 
         const array = data.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
-
+        setUltimo(data.docs[data.docs.length - 1])
         setTareas(array)
+
+        const query = await db
+          .collection(user.uid)
+          .limit(4)
+          .orderBy('fecha', 'asc')
+          .startAfter(data.docs[data.docs.length - 1])
+          .get()
+
+        if (query.empty) {
+          setDesactivar(true)
+        } else {
+          setDesactivar(false)
+        }
       } catch (error) {
         console.log(error)
       }
     }
-    getData()
+    ObtenerDatos()
   }, [user])
 
   const agregarTarea = async (e) => {
@@ -70,6 +87,36 @@ const Todo = ({ user }) => {
     setId('')
     setModoEditar(false)
     setTarea('')
+  }
+  const ObtenerSiguiente = async () => {
+    console.log('siguiente')
+    try {
+      setDesactivar(true)
+      const data = await db
+        .collection(user.uid)
+        .limit(4)
+        .orderBy('fecha', 'asc')
+        .startAfter(ultimo)
+        .get()
+
+      const array = data.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
+      setTareas([...tareas, ...array])
+      setUltimo(data.docs[data.docs.length - 1])
+      const query = await db
+        .collection(user.uid)
+        .limit(4)
+        .orderBy('fecha', 'asc')
+        .startAfter(data.docs[data.docs.length - 1])
+        .get()
+
+      if (query.empty) {
+        setDesactivar(true)
+      } else {
+        setDesactivar(false)
+      }
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   return (
@@ -115,6 +162,12 @@ const Todo = ({ user }) => {
               </li>
             ))}
           </ul>
+          <button
+            className='btn btn-info btn-sm btn-block mt-2'
+            onClick={() => ObtenerSiguiente()}
+            disabled={desactivar}>
+            Siguiente...
+          </button>
         </div>
       </div>
     </div>
