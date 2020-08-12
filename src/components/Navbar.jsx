@@ -19,6 +19,9 @@ const Navbar = (props) => {
           <NavLink className='btn btn-dark mr-2' to='/' exact>
             Inicio
           </NavLink>
+          <NavLink className='btn btn-dark mr-2' to='/pokemon' exact>
+            Pokemon
+          </NavLink>
           {props.firebaseUser && (
             <NavLink className='btn btn-dark mr-2' to='/admin'>
               Admin

@@ -5,6 +5,7 @@ import Login from './components/Login/Login'
 import { auth } from './services/firebase'
 import Admin from './components/Admin'
 import Reset from './components/Login/Reset'
+import Pokemon from './components/pokemon'
 
 const App = () => {
   const [firebaseUser, setFirebaseUser] = React.useState(false)
@@ -27,6 +28,9 @@ const App = () => {
         <Switch>
           <Route path='/login'>
             <Login />
+          </Route>
+          <Route path='/pokemon'>
+            <Pokemon />
           </Route>
           <Route path='/admin'>
             <Admin />

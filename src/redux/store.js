@@ -1,7 +1,15 @@
-import { createStore } from 'redux'
-import reducer from './reducers/index'
+import { createStore, combineReducers, compose, applyMiddleware } from 'redux'
+import thunk from 'redux-thunk'
 
-const store = createStore(reducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
-console.log('created STORE', store.getState())
+import pokesReducer from './pokeducks'
 
-export default store
+const rootReducer = combineReducers({
+  pokemones: pokesReducer
+})
+
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
+export default function generateStore() {
+  const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)))
+  return store
+}
