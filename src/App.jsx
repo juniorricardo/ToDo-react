@@ -6,9 +6,13 @@ import { auth } from './services/firebase'
 import Admin from './components/Admin'
 import Reset from './components/Login/Reset'
 import Pokemon from './components/pokemon'
+import { Provider } from 'react-redux'
+import generateStore from './redux/store'
 
 const App = () => {
   const [firebaseUser, setFirebaseUser] = React.useState(false)
+
+  const store = generateStore()
 
   React.useEffect(() => {
     auth.onAuthStateChanged((user) => {
@@ -22,28 +26,30 @@ const App = () => {
   }, [])
 
   return firebaseUser !== false ? (
-    <Router>
-      <div className='container'>
-        <Navbar firebaseUser={firebaseUser} />
-        <Switch>
-          <Route path='/login'>
-            <Login />
-          </Route>
-          <Route path='/pokemon'>
-            <Pokemon />
-          </Route>
-          <Route path='/admin'>
-            <Admin />
-          </Route>
-          <Route path='/reset'>
-            <Reset />
-          </Route>
-          <Route path='/' exact>
-            Ruta de inicio
-          </Route>
-        </Switch>
-      </div>
-    </Router>
+    <Provider store={store}>
+      <Router>
+        <div className='container'>
+          <Navbar firebaseUser={firebaseUser} />
+          <Switch>
+            <Route path='/login'>
+              <Login />
+            </Route>
+            <Route path='/pokemon'>
+              <Pokemon />
+            </Route>
+            <Route path='/admin'>
+              <Admin />
+            </Route>
+            <Route path='/reset'>
+              <Reset />
+            </Route>
+            <Route path='/' exact>
+              Ruta de inicio
+            </Route>
+          </Switch>
+        </div>
+      </Router>
+    </Provider>
   ) : (
     <p>Cargando...</p>
   )

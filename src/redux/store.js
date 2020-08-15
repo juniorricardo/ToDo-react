@@ -1,6 +1,8 @@
 import { createStore, combineReducers, compose, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
 
+//applyMiddleware => promise with 'thunk'
+
 import pokesReducer from './pokeducks'
 
 const rootReducer = combineReducers({
