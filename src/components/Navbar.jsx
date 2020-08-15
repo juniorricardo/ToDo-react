@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link, NavLink, withRouter } from 'react-router-dom'
 import { auth } from './../services/firebase'
+import { FaGithubAlt, FaUser } from 'react-icons/fa'
 
 const Navbar = (props) => {
   const cerrarSesion = () => {
@@ -12,7 +13,7 @@ const Navbar = (props) => {
   return (
     <div className='navbar navbar-dark bg-dark'>
       <Link to='/' className='navbar-brand'>
-        To do App - Novem
+        To do App - Novem <FaGithubAlt />
       </Link>
       <div>
         <div className='d-flex'>
@@ -33,7 +34,7 @@ const Navbar = (props) => {
             </button>
           ) : (
             <NavLink className='btn btn-dark' to='/login'>
-              Login
+              Login <FaUser />
             </NavLink>
           )}
         </div>
