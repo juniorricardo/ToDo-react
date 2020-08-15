@@ -44,7 +44,7 @@ const Pokemon = () => {
                 Siguiente <FaChevronRight />
               </button>
             )}
-            <ul className='list-group list-group-flush'>
+            <ul className='list-group list-group mt-2'>
               {pokemones.map((poke, index) => (
                 <li
                   key={index}

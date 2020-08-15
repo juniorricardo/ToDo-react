@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { withRouter } from 'react-router-dom'
-import { db, auth } from '../../services/firebase'
+import { auth } from '../../services/firebase'
 
 const Reset = ({ history }) => {
   const [email, setEmail] = useState('')

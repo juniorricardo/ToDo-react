@@ -55,7 +55,7 @@ const Login = ({ history }) => {
   const IniciarSesion = React.useCallback(async () => {
     try {
       const res = await auth.signInWithEmailAndPassword(email, password)
-      //console.log(res.user)
+      console.log(res.user)
       LimpiarCampos()
       history.push('/admin')
     } catch (error) {

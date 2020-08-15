@@ -1,5 +1,4 @@
 import axios from 'axios'
-import { FaAcquisitionsIncorporated } from 'react-icons/fa'
 
 // constantes
 const dataInicial = {
@@ -105,10 +104,8 @@ export const anteriorPokemonesAction = () => async (dispatch, getState) => {
   }
 }
 
-export const detallePokemonAction = (url) => async (dispatch) => {
-  if (url === undefined) {
-    url = './../images/how.svg'
-  }
+export const detallePokemonAction = (url = 'https://raw.githubusercontent.com/juniorricardo/ToDo-react/master/src/images/how.svg') => async (dispatch) => {
+
   try {
     const res = await axios.get(url)
     console.log(res.data)
@@ -118,7 +115,8 @@ export const detallePokemonAction = (url) => async (dispatch) => {
         name: res.data.name,
         weight: res.data.weight,
         height: res.data.height,
-        picture: res.data.sprites.other.dream_world.front_default
+        picture: res.data.sprites.other.dream_world.front_default,
+        types: res.data.types.map(t => t.type.name)
       }
     })
   } catch (error) {
