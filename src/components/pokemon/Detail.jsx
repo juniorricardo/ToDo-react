@@ -16,7 +16,7 @@ const Detail = () => {
   console.log(pokemon)
   return (
     <div>
-      <h3>Detalle Pokemon</h3>
+      <h3>Detalle</h3>
       <hr />
       {pokemon && (
         <div className='card p-0 text-center'>
@@ -24,6 +24,7 @@ const Detail = () => {
             <img
               src={pokemon.picture}
               className='img-fluid mb-2 rounded mx-auto d-block shadow-sm p-3 bg-white rounded'
+              alt=''
             />
             {pokemon.types.map((t, index) => (
               <span className='badge badge-secondary mr-1' key={index}>

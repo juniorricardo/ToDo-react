@@ -18,9 +18,10 @@ const Pokemon = () => {
 
   return (
     <div className='border border-black p-3'>
+      <p className='display-4 text-center'>Pokemon</p>
       <div className='row'>
         <div className='col-md-6'>
-          <h3>Lista de Pokemons</h3>
+          <h3>Lista</h3>
           <hr />
           <div className='my-2'>
             {pokemones.length === 0 && (

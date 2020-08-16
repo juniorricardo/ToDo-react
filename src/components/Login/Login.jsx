@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { db, auth } from './../../services/firebase'
 import { withRouter } from 'react-router-dom'
+import { FcGoogle } from 'react-icons/fc'
 
 const Login = ({ history }) => {
   const [email, setEmail] = useState('')
@@ -103,6 +104,10 @@ const Login = ({ history }) => {
             />
             <button className='btn btn-dark btn-lg btn-block' type='submit'>
               {esRegistro ? 'Registrarse' : 'Acceder'}
+            </button>
+            <button className='btn btn-dark btn-sm btn-block' type='submit'>
+              {esRegistro ? 'Registrarse con Google ' : 'Acceder con Google '}
+              <FcGoogle size={20} />
             </button>
             <button
               className='btn btn-info btn-sm btn-block'
