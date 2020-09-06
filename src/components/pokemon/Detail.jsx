@@ -1,6 +1,6 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { detallePokemonAction } from './../../redux/pokeducks'
+import { detallePokemonAction } from './../../redux/pokeDucks'
 
 const Detail = () => {
   const dispatch = useDispatch()

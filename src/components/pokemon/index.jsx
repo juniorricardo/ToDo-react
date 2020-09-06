@@ -5,7 +5,7 @@ import {
   siguientePokemonesAction,
   anteriorPokemonesAction,
   detallePokemonAction
-} from './../../redux/pokeducks'
+} from './../../redux/pokeDucks'
 import { FaChevronLeft, FaChevronRight, FaSearchPlus } from 'react-icons/fa'
 import Detail from './Detail'
 

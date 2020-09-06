@@ -24,7 +24,7 @@ export default function pokesReducer(state = dataInicial, action) {
     case PREVIOUS_POKE_SUCCESS:
       return {
         ...state,
-        ...action.payload,
+        ...action.payload
       }
     case SHOW_POKE_DETAIL:
       return {
@@ -38,7 +38,6 @@ export default function pokesReducer(state = dataInicial, action) {
 
 // actions
 export const obtenerPokemonsAction = () => async (dispatch, getState) => {
-
   if (localStorage.getItem('offset=0')) {
     dispatch({
       type: GET_POKE_SUCCESS,
@@ -47,7 +46,9 @@ export const obtenerPokemonsAction = () => async (dispatch, getState) => {
     return
   }
   try {
-    const res = await axios.get(`https://pokeapi.co/api/v2/pokemon?offset=0&limit=10`)
+    const res = await axios.get(
+      'https://pokeapi.co/api/v2/pokemon?offset=0&limit=10'
+    )
     dispatch({
       type: GET_POKE_SUCCESS,
       payload: res.data
@@ -56,7 +57,6 @@ export const obtenerPokemonsAction = () => async (dispatch, getState) => {
   } catch (error) {
     console.log(error)
   }
-
 }
 
 export const siguientePokemonesAction = () => async (dispatch, getState) => {
@@ -81,7 +81,6 @@ export const siguientePokemonesAction = () => async (dispatch, getState) => {
   }
 }
 
-
 export const anteriorPokemonesAction = () => async (dispatch, getState) => {
   const { previous } = getState().pokemones
 
@@ -104,8 +103,9 @@ export const anteriorPokemonesAction = () => async (dispatch, getState) => {
   }
 }
 
-export const detallePokemonAction = (url = 'https://raw.githubusercontent.com/juniorricardo/ToDo-react/master/src/images/how.svg') => async (dispatch) => {
-
+export const detallePokemonAction = (
+  url = 'https://raw.githubusercontent.com/juniorricardo/ToDo-react/master/src/images/how.svg'
+) => async (dispatch) => {
   try {
     const res = await axios.get(url)
     console.log(res.data)
@@ -116,7 +116,7 @@ export const detallePokemonAction = (url = 'https://raw.githubusercontent.com/ju
         weight: res.data.weight,
         height: res.data.height,
         picture: res.data.sprites.other.dream_world.front_default,
-        types: res.data.types.map(t => t.type.name)
+        types: res.data.types.map((t) => t.type.name)
       }
     })
   } catch (error) {

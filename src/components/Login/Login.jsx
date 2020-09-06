@@ -105,7 +105,7 @@ const Login = ({ history }) => {
             <button className='btn btn-dark btn-lg btn-block' type='submit'>
               {esRegistro ? 'Registrarse' : 'Acceder'}
             </button>
-            <button className='btn btn-dark btn-sm btn-block' type='submit'>
+            <button className='btn btn-dark btn-sm btn-block' type='button'>
               {esRegistro ? 'Registrarse con Google ' : 'Acceder con Google '}
               <FcGoogle size={20} />
             </button>
