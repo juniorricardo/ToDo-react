@@ -3,7 +3,7 @@ import thunk from 'redux-thunk'
 
 //applyMiddleware => promise with 'thunk'
 
-import pokesReducer from './pokeducks'
+import pokesReducer from './pokeDucks'
 
 const rootReducer = combineReducers({
   pokemones: pokesReducer

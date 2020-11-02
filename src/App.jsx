@@ -1,18 +1,14 @@
 import React from 'react'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
-import Navbar from './components/Navbar'
-import Login from './components/Login/Login'
 import { auth } from './services/firebase'
-import Admin from './components/Admin'
-import Reset from './components/Login/Reset'
+import Navbar from './components/Navbar'
 import Pokemon from './components/pokemon'
-import { Provider } from 'react-redux'
-import generateStore from './redux/store'
+import Admin from './components/Admin'
+import Login from './components/Login/Login'
+import Reset from './components/Login/Reset'
 
 const App = () => {
   const [firebaseUser, setFirebaseUser] = React.useState(false)
-
-  const store = generateStore()
 
   React.useEffect(() => {
     auth.onAuthStateChanged((user) => {
@@ -26,30 +22,20 @@ const App = () => {
   }, [])
 
   return firebaseUser !== false ? (
-    <Provider store={store}>
-      <Router>
-        <div className='container'>
-          <Navbar firebaseUser={firebaseUser} />
-          <Switch>
-            <Route path='/login'>
-              <Login />
-            </Route>
-            <Route path='/pokemon'>
-              <Pokemon />
-            </Route>
-            <Route path='/admin'>
-              <Admin />
-            </Route>
-            <Route path='/reset'>
-              <Reset />
-            </Route>
-            <Route path='/' exact>
-              Ruta de inicio
-            </Route>
-          </Switch>
-        </div>
-      </Router>
-    </Provider>
+    <Router>
+      <div className='container'>
+        <Navbar firebaseUser={firebaseUser} />
+        <Switch>
+          <Route path='/pokemon' component={Pokemon} />
+          <Route path='/admin' component={Admin} />
+          <Route path='/login' component={Login} />
+          <Route path='/reset' component={Reset} />
+          <Route path='/' exact>
+            Ruta de inicio
+          </Route>
+        </Switch>
+      </div>
+    </Router>
   ) : (
     <p>Cargando...</p>
   )

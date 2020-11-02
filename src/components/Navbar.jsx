@@ -15,29 +15,30 @@ const Navbar = (props) => {
       <Link to='/' className='navbar-brand'>
         To do App - Novem <FaGithubAlt />
       </Link>
-      <div>
-        <div className='d-flex'>
-          <NavLink className='btn btn-dark mr-2' to='/' exact>
-            Inicio
-          </NavLink>
-          <NavLink className='btn btn-dark mr-2' to='/pokemon' exact>
-            Pokemon
-          </NavLink>
-          {props.firebaseUser && (
+      <div className='d-flex'>
+        <NavLink className='btn btn-dark mr-2' to='/' exact>
+          Inicio
+        </NavLink>
+
+        {props.firebaseUser && (
+          <React.Fragment>
+            <NavLink className='btn btn-dark mr-2' to='/pokemon' exact>
+              Pokemon
+            </NavLink>
             <NavLink className='btn btn-dark mr-2' to='/admin'>
               Admin
             </NavLink>
-          )}
-          {props.firebaseUser !== null ? (
-            <button className='btn btn-dark' onClick={() => cerrarSesion()}>
-              Cerrar sesion
-            </button>
-          ) : (
-            <NavLink className='btn btn-dark' to='/login'>
-              Login <FaUser />
-            </NavLink>
-          )}
-        </div>
+          </React.Fragment>
+        )}
+        {props.firebaseUser !== null ? (
+          <button className='btn btn-dark' onClick={() => cerrarSesion()}>
+            Cerrar sesion
+          </button>
+        ) : (
+          <NavLink className='btn btn-dark' to='/login'>
+            Login <FaUser />
+          </NavLink>
+        )}
       </div>
     </div>
   )
