@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { db, auth } from './../../services/firebase'
+import firebase from 'firebase'
 import { withRouter } from 'react-router-dom'
 import { FcGoogle } from 'react-icons/fc'
 
@@ -27,46 +28,50 @@ const Login = ({ history }) => {
     if (esRegistro) {
       Registrar()
     } else {
-      IniciarSesion()
+      iniciarSesion()
     }
   }
 
   const Registrar = React.useCallback(async () => {
     try {
       const res = await auth.createUserWithEmailAndPassword(email, password)
+      console.log(res.user)
       await db.collection(res.user.uid).add({
         descripcion: 'Inicio de coleccion',
         fecha: Date.now()
       })
       LimpiarCampos()
       history.push('/admin')
-    } catch (error) {
-      console.log(error)
-      if (error.code === 'auth/email-already-in-use') {
+    } catch (err) {
+      console.log(err)
+      if (err.code === 'auth/email-already-in-use') {
         setError('Email ingresado ya existe.')
         return
       }
-      if (error.code === 'auth/invalid-email') {
+      if (err.code === 'auth/invalid-email') {
         setError('Email no válido.')
         return
       }
     }
   }, [email, password, history])
 
-  const IniciarSesion = React.useCallback(async () => {
+  const iniciarSesion = React.useCallback(async () => {
     try {
       const res = await auth.signInWithEmailAndPassword(email, password)
       console.log(res.user)
       LimpiarCampos()
       history.push('/admin')
-    } catch (error) {
-      console.log(error)
+    } catch (err) {
+      console.log(err)
       if (
-        error.code === 'auth/invalid-email' ||
-        error.code === 'auth/user-not-found' ||
-        error.code === 'auth/wrong-password'
+        err.code === 'auth/invalid-email' ||
+        err.code === 'auth/user-not-found' ||
+        err.code === 'auth/wrong-password'
       ) {
         setError('Email y/o contraseña no son validos')
+        return
+      } else {
+        setError(`Error no interpretado: ${err.code}`)
         return
       }
     }
@@ -77,6 +82,39 @@ const Login = ({ history }) => {
     setPassword('')
     setError(null)
   }
+
+  const accesoConGoogle = React.useCallback(async () => {
+    const provider = new firebase.auth.GoogleAuthProvider()
+    await auth
+      .signInWithPopup(provider)
+      .then(async (res) => {
+        console.log(res.user)
+
+        const querySnapshot = await db.collection(res.user.uid).limit(1).get()
+        if (querySnapshot.empty) {
+          await db.collection(res.user.uid).add({
+            descripcion: 'Inicio de coleccion',
+            fecha: Date.now()
+          })
+        }
+        LimpiarCampos()
+        history.push('/admin')
+      })
+      .catch((err) => {
+        console.log(err)
+        if (err.code === 'auth/email-already-in-use') {
+          setError('Email ingresado ya existe.')
+          return
+        } else if (err.code === 'auth/invalid-email') {
+          setError('Email no válido.')
+          return
+        } else {
+          //"auth/wrong-password"
+          setError(`Error no interpretado: ${err.code}`)
+          return
+        }
+      })
+  }, [history])
 
   return (
     <div className='mt-3'>
@@ -105,8 +143,11 @@ const Login = ({ history }) => {
             <button className='btn btn-dark btn-lg btn-block' type='submit'>
               {esRegistro ? 'Registrarse' : 'Acceder'}
             </button>
-            <button className='btn btn-dark btn-sm btn-block' type='button'>
-              {esRegistro ? 'Registrarse con Google ' : 'Acceder con Google '}
+            <button
+              className='btn btn-dark btn-sm btn-block'
+              type='button'
+              onClick={() => accesoConGoogle()}>
+              {esRegistro ? 'Registrarse con Google' : 'Acceder con Google'}
               <FcGoogle size={20} />
             </button>
             <button
